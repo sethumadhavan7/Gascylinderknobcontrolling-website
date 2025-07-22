@@ -22,7 +22,7 @@ const Auth = () => {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('/api/auth/signup', { username, password });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, { username, password });
       setTab(1); // Switch to login tab after signup
       setUsername('');
       setPassword('');
@@ -35,7 +35,7 @@ const Auth = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('/api/auth/login', { username, password });
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, { username, password });
       localStorage.setItem('token', res.data.token);
       navigate('/dashboard');
     } catch (err) {
