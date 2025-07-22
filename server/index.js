@@ -10,7 +10,10 @@ app.set('trust proxy', 1); // trust first proxy for rate limiting
 
 // Security Middlewares
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+     origin: 'https://gas-frontend-el6y.onrender.com',
+     credentials: true
+   }));
 app.use(express.json());
 
 // Rate Limiting
