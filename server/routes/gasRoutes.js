@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
     let knobStatus = latest ? latest.knobStatus : 'OPEN';
 
     // Once CLOSED, it must remain CLOSED
-    if (knobStatus !== 'CLOSED' && gasValue > 500) {
+    if (knobStatus !== 'CLOSED' && gasValue > 20) {
       knobStatus = 'CLOSED';
       await sendSMS(
         `🚨 ALERT: Gas value exceeded! Value: ${gasValue}. Knob has been CLOSED for safety.`,
