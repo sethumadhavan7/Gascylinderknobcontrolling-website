@@ -56,7 +56,7 @@ const auth = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// POST /api/gas - ESP8266 posts gas data
+// POST /api/gas - ESP8266 posts gas data (AUTO CONTROL + SMS)
 router.post('/', async (req, res) => {
   const { gasValue } = req.body;
 
@@ -65,23 +65,31 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // Fetch the latest gas data entry
+    // Get last record to detect status change (for SMS)
     const latest = await Gas.findOne().sort({ timestamp: -1 });
-    let knobStatus = latest ? latest.knobStatus : 'OPEN';
 
-    // Once CLOSED, it must remain CLOSED
-    if (knobStatus !== 'CLOSED' && gasValue > 20) {
-      knobStatus = 'CLOSED';
+    // 🔥 AUTO CONTROL:
+    // If gasValue > THRESHOLD  → CLOSED
+    // If gasValue <= THRESHOLD → OPEN
+    const THRESHOLD = 20;
+    let knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
+
+    // ✅ SMS only when it CHANGES to CLOSED (avoid spam)
+    if (
+      knobStatus === 'CLOSED' &&
+      (!latest || latest.knobStatus !== 'CLOSED')
+    ) {
       await sendSMS(
-        `🚨 ALERT: Gas value exceeded! Value: ${gasValue}. Knob has been CLOSED for safety.`,
+        `🚨 ALERT: Gas value exceeded! Value: ${gasValue}. Knob set to CLOSED for safety.`,
         '+919677454080'
       );
     }
 
-    // Save current reading
+    // Save current reading (with current knobStatus)
     const gas = new Gas({ gasValue, knobStatus });
     await gas.save();
 
+    // ESP8266 will use knobStatus from this response
     res.status(201).json({ message: 'Gas data saved', knobStatus });
   } catch (err) {
     console.error('Error saving gas data:', err);
