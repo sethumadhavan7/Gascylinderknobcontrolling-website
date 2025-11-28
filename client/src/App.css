@@ -280,3 +280,221 @@
     display: none;
   }
 }
+/* Global */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Background */
+.background {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #e3e6f3 0%, #f8e1f4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem 1rem;
+}
+
+/* Floating cubes (same as before) */
+.cube {
+  position: absolute;
+  background: rgba(25, 118, 210, 0.10);
+  border-radius: 10px;
+  animation: floatCube 12s linear infinite;
+  opacity: 0.7;
+}
+
+/* ... keep your nth-child cube styles & keyframes here ... */
+
+.card-container {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
+  padding: 2.5rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  margin: 1.5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.page-title {
+  color: #1976d2;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Dashboard specific layout */
+.dashboard-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-main-card {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Top 3 cards row */
+.dashboard-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.dashboard-card {
+  flex: 1;
+  min-width: 280px;
+  margin: 0;
+}
+
+.card-title {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.card-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Threshold chips */
+.thresholds-chip-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.threshold-chip {
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.threshold-chip.safe {
+  background: #43a047;
+}
+.threshold-chip.warn {
+  background: #ffa000;
+}
+.threshold-chip.danger {
+  background: #d32f2f;
+}
+
+/* Charts */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.chart-toggle-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 250px;
+}
+
+/* Recent readings */
+.recent-readings-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.recent-reading-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem 1.2rem;
+  min-width: 120px;
+  border: 2px solid #f44336;
+  text-align: center;
+}
+
+/* ========= RESPONSIVE ========= */
+
+@media (max-width: 900px) {
+  .dashboard-top {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .background {
+    align-items: flex-start;
+    padding: 1.5rem 0.75rem;
+  }
+
+  .dashboard-wrapper {
+    padding: 0 0.25rem;
+  }
+
+  .card-container {
+    max-width: 100%;
+    margin: 0.75rem 0;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .dashboard-main-card {
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .chart-wrapper {
+    height: 220px;
+  }
+
+  .recent-readings-container {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .background {
+    padding: 1rem 0.5rem;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  /* If the cubes feel too cluttered on very small screens */
+  .cube {
+    display: none;
+  }
+}
