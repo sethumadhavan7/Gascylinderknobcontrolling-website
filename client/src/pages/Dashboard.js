@@ -47,8 +47,10 @@ const Dashboard = () => {
         intervalRef.current = setInterval(fetchData, backoffRef.current);
       }
     };
+
     fetchData();
     intervalRef.current = setInterval(fetchData, backoffRef.current);
+
     return () => {
       cancelled = true;
       clearInterval(intervalRef.current);
@@ -69,18 +71,26 @@ const Dashboard = () => {
 
   return (
     <div className="background">
-      <div style={{ width: '100%', maxWidth: 1200, margin: '0 auto', padding: '0 1rem' }}>
-        <div className="card-container" style={{ maxWidth: 1200, margin: '2rem auto 1.5rem auto', padding: '2rem 2.5rem' }}>
+      <div className="dashboard-wrapper" style={{ width: '100%', maxWidth: 1200, margin: '0 auto' }}>
+        <div
+          className="card-container dashboard-main-card"
+          style={{ maxWidth: 1200, margin: '2rem auto 1.5rem auto', padding: '2rem 2.5rem' }}
+        >
           <h1 className="page-title">Gas Monitoring Dashboard</h1>
           {initialLoading ? (
             <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />
           ) : (
             <>
               {/* Top Section: Current Gas Level, System Status, Safety Thresholds */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'space-between', marginBottom: 32 }}>
+              <div
+                className="dashboard-top"
+                style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'space-between', marginBottom: 32 }}
+              >
                 {/* Current Gas Level */}
                 <div className="card-container" style={{ flex: 1, minWidth: 280, margin: 0 }}>
-                  <Typography variant="h6" style={{ marginBottom: 8 }}>Current Gas Level</Typography>
+                  <Typography variant="h6" style={{ marginBottom: 8 }}>
+                    Current Gas Level
+                  </Typography>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <Gauge
                       value={latestValue !== 'N/A' ? latestValue : 0}
@@ -91,46 +101,121 @@ const Dashboard = () => {
                       height={120}
                       text={latestValue !== 'N/A' ? `${latestValue}` : 'N/A'}
                     />
-                    <Typography variant="h5" style={{ fontWeight: 700, marginTop: 8 }}>{latestValue !== 'N/A' ? `${latestValue} ppm` : 'N/A'}</Typography>
-                    <Typography variant="body2" color="textSecondary" style={{ marginTop: 4 }}>Last updated: {latestTime}</Typography>
+                    <Typography variant="h5" style={{ fontWeight: 700, marginTop: 8 }}>
+                      {latestValue !== 'N/A' ? `${latestValue} ppm` : 'N/A'}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" style={{ marginTop: 4 }}>
+                      Last updated: {latestTime}
+                    </Typography>
                   </div>
                 </div>
+
                 {/* System Status */}
                 <div className="card-container" style={{ flex: 1, minWidth: 280, margin: 0 }}>
-                  <Typography variant="h6" style={{ marginBottom: 8 }}>System Status</Typography>
+                  <Typography variant="h6" style={{ marginBottom: 8 }}>
+                    System Status
+                  </Typography>
                   <div style={{ marginBottom: 8 }}>
                     {latestValue !== 'N/A' && (
-                      <Typography style={{ color: getStatus(latestValue) === 'danger' ? '#d32f2f' : getStatus(latestValue) === 'warning' ? '#f9a825' : '#388e3c', fontWeight: 600 }}>
+                      <Typography
+                        style={{
+                          color:
+                            getStatus(latestValue) === 'danger'
+                              ? '#d32f2f'
+                              : getStatus(latestValue) === 'warning'
+                              ? '#f9a825'
+                              : '#388e3c',
+                          fontWeight: 600,
+                        }}
+                      >
                         {getStatus(latestValue) === 'danger' && 'DANGER: Critical gas levels!'}
                         {getStatus(latestValue) === 'warning' && 'Warning: Elevated gas levels.'}
                         {getStatus(latestValue) === 'safe' && 'Safe'}
                       </Typography>
                     )}
                   </div>
-                  <Typography>Cylinder Knob: <span style={{ color: knobStatus === 'CLOSED' ? '#d32f2f' : '#388e3c', fontWeight: 600 }}>{knobStatus}</span></Typography>
-                  <Typography variant="body2" color="textSecondary" style={{ marginTop: 4 }}>Last updated: {latestTime}</Typography>
+                  <Typography>
+                    Cylinder Knob:{' '}
+                    <span
+                      style={{
+                        color: knobStatus === 'CLOSED' ? '#d32f2f' : '#388e3c',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {knobStatus}
+                    </span>
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" style={{ marginTop: 4 }}>
+                    Last updated: {latestTime}
+                  </Typography>
                 </div>
+
                 {/* Safety Thresholds */}
                 <div className="card-container" style={{ flex: 1, minWidth: 280, margin: 0 }}>
-                  <Typography variant="h6" style={{ marginBottom: 8 }}>Safety Thresholds</Typography>
+                  <Typography variant="h6" style={{ marginBottom: 8 }}>
+                    Safety Thresholds
+                  </Typography>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <div style={{ background: '#43a047', color: '#fff', borderRadius: 6, padding: '8px 16px', fontWeight: 600 }}>Safe: Below 300 ppm</div>
-                    <div style={{ background: '#ffa000', color: '#fff', borderRadius: 6, padding: '8px 16px', fontWeight: 600 }}>Warning: 300-600 ppm</div>
-                    <div style={{ background: '#d32f2f', color: '#fff', borderRadius: 6, padding: '8px 16px', fontWeight: 600 }}>Danger: Above 600 ppm</div>
+                    <div
+                      style={{
+                        background: '#43a047',
+                        color: '#fff',
+                        borderRadius: 6,
+                        padding: '8px 16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Safe: Below 300 ppm
+                    </div>
+                    <div
+                      style={{
+                        background: '#ffa000',
+                        color: '#fff',
+                        borderRadius: 6,
+                        padding: '8px 16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Warning: 300-600 ppm
+                    </div>
+                    <div
+                      style={{
+                        background: '#d32f2f',
+                        color: '#fff',
+                        borderRadius: 6,
+                        padding: '8px 16px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Danger: Above 600 ppm
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Historical Gas Levels (Last 24 Hours) */}
               <div className="card-container" style={{ marginBottom: 32 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
+                <div className="chart-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                   <Typography variant="h6">Historical Gas Levels (Last 24 Hours)</Typography>
-                  <div>
-                    <Button variant={chartType === 'line' ? 'outlined' : 'contained'} size="small" style={{ marginRight: 8 }} onClick={() => setChartType('line')}>Line Chart</Button>
-                    <Button variant={chartType === 'bar' ? 'outlined' : 'contained'} size="small" onClick={() => setChartType('bar')}>Bar Chart</Button>
+                  <div className="chart-toggle-buttons">
+                    <Button
+                      variant={chartType === 'line' ? 'outlined' : 'contained'}
+                      size="small"
+                      style={{ marginRight: 8 }}
+                      onClick={() => setChartType('line')}
+                    >
+                      Line Chart
+                    </Button>
+                    <Button
+                      variant={chartType === 'bar' ? 'outlined' : 'contained'}
+                      size="small"
+                      onClick={() => setChartType('bar')}
+                    >
+                      Bar Chart
+                    </Button>
                   </div>
                 </div>
-                <div style={{ width: '100%', height: 250 }}>
+                <div className="chart-wrapper" style={{ width: '100%', height: 250 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     {chartType === 'line' ? (
                       <LineChart data={gasData.slice().reverse()}>
@@ -155,13 +240,35 @@ const Dashboard = () => {
 
               {/* Recent Readings */}
               <div className="card-container">
-                <Typography variant="h6" style={{ marginBottom: 16 }}>Recent Readings</Typography>
-                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                <Typography variant="h6" style={{ marginBottom: 16 }}>
+                  Recent Readings
+                </Typography>
+                <div className="recent-readings-container" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   {gasData.slice(0, 6).map((reading, idx) => (
-                    <div key={idx} style={{ background: '#fff', borderRadius: 10, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', padding: '1rem 1.2rem', minWidth: 110, border: '2px solid #f44336', textAlign: 'center' }}>
-                      <Typography variant="subtitle2" style={{ color: '#f44336', fontWeight: 700, fontSize: 18 }}>{new Date(reading.timestamp).toLocaleTimeString()}</Typography>
-                      <Typography variant="h6" style={{ color: '#f44336', fontWeight: 700 }}>{reading.gasValue} ppm</Typography>
-                      <Typography variant="body2" color="textSecondary" style={{ marginTop: 2 }}>{new Date(reading.timestamp).toLocaleDateString()}</Typography>
+                    <div
+                      key={idx}
+                      style={{
+                        background: '#fff',
+                        borderRadius: 10,
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                        padding: '1rem 1.2rem',
+                        minWidth: 110,
+                        border: '2px solid #f44336',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <Typography
+                        variant="subtitle2"
+                        style={{ color: '#f44336', fontWeight: 700, fontSize: 18 }}
+                      >
+                        {new Date(reading.timestamp).toLocaleTimeString()}
+                      </Typography>
+                      <Typography variant="h6" style={{ color: '#f44336', fontWeight: 700 }}>
+                        {reading.gasValue} ppm
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" style={{ marginTop: 2 }}>
+                        {new Date(reading.timestamp).toLocaleDateString()}
+                      </Typography>
                     </div>
                   ))}
                 </div>
