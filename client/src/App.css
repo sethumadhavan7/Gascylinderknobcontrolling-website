@@ -98,7 +98,7 @@
 /* Floating cubes */
 .cube {
   position: absolute;
-  background: rgba(25, 118, 210, 0.10);
+  background: rgba(25, 118, 210, 0.10); /* blue, matches #1976d2 */
   border-radius: 10px;
   animation: floatCube 12s linear infinite;
   opacity: 0.7;
@@ -169,375 +169,282 @@
   background: #125ea2 !important;
 }
 
-/* Dashboard Specific Styles */
-.dashboard-wrapper {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.dashboard-main-card {
-  max-width: 1200px;
-  margin: 2rem auto 1.5rem auto;
-  padding: 2rem 2.5rem;
-}
-
-.dashboard-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: space-between;
-  margin-bottom: 32px;
-}
-
-.dashboard-card {
-  flex: 1;
-  min-width: 280px;
-  margin: 0;
-}
-
-.card-title {
-  margin-bottom: 8px !important;
-  font-weight: 600 !important;
-}
-
-.gauge-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.gauge-value {
-  font-weight: 700 !important;
-  margin-top: 8px !important;
-}
-
-.update-time {
-  margin-top: 4px !important;
-}
-
-.status-text {
-  font-size: 1rem;
-  margin-bottom: 8px;
-}
-
-.knob-status {
-  font-size: 1rem;
-}
-
-.threshold-badges {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.threshold-badge {
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-weight: 600;
-  color: #fff;
-  font-size: 0.875rem;
-}
-
-.safe-badge {
-  background: #43a047;
-}
-
-.warning-badge {
-  background: #ffa000;
-}
-
-.danger-badge {
-  background: #d32f2f;
-}
-
-.chart-card {
-  margin-bottom: 32px;
-}
-
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.chart-title {
-  font-weight: 600 !important;
-}
-
-.chart-buttons {
-  display: flex;
-  gap: 8px;
-}
-
-.chart-button {
-  min-width: 60px !important;
-}
-
-.chart-container {
-  width: 100%;
-  height: 250px;
-}
-
-.readings-grid {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.reading-card {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 1rem 1.2rem;
-  min-width: 110px;
-  border: 2px solid #f44336;
-  text-align: center;
-}
-
-.reading-time {
-  color: #f44336 !important;
-  font-weight: 700 !important;
-  font-size: 18px !important;
-}
-
-.reading-value {
-  color: #f44336 !important;
-  font-weight: 700 !important;
-}
-
-.reading-date {
-  margin-top: 2px !important;
-}
-
-/* Tablet Responsive (768px and below) */
-@media (max-width: 768px) {
-  .dashboard-wrapper {
-    padding: 0 0.75rem;
+/* Mobile responsive styles for tablets */
+@media (max-width: 900px) {
+  .background {
+    padding: 1rem 0;
   }
+  
+  .page-title {
+    font-size: 1.9rem;
+  }
+  
+  /* Make dashboard cards stack */
+  .card-container > div:first-of-type {
+    flex-direction: column !important;
+  }
+  
+  .card-container > div:first-of-type > .card-container {
+    min-width: 100% !important;
+    flex: none !important;
+  }
+}
 
-  .dashboard-main-card {
-    padding: 1.5rem 1.25rem;
+@media (max-width: 768px) {
+  .card-container {
+    padding: 2rem 1.5rem;
+    width: 92%;
     margin: 1rem auto;
   }
-
+  
   .page-title {
     font-size: 1.8rem;
-    margin-bottom: 1.25rem;
   }
-
-  .dashboard-grid {
-    gap: 16px;
-    margin-bottom: 24px;
+  
+  .styled-button {
+    font-size: 1rem;
   }
-
-  .dashboard-card {
-    min-width: 100%;
-    padding: 1.5rem 1.25rem;
+  
+  /* Chart buttons responsiveness */
+  .card-container > div > div > button {
+    font-size: 0.875rem !important;
+    padding: 6px 12px !important;
   }
-
-  .card-title {
-    font-size: 1.1rem !important;
+  
+  /* Recent readings grid */
+  .card-container > div:last-child {
+    justify-content: center !important;
   }
-
-  .threshold-badges {
-    gap: 6px;
-  }
-
-  .threshold-badge {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    flex: 1;
-    min-width: 120px;
-  }
-
-  .chart-card {
-    margin-bottom: 24px;
-    padding: 1.5rem 1.25rem;
-  }
-
-  .chart-header {
-    gap: 8px;
-  }
-
-  .chart-title {
-    font-size: 1.1rem !important;
-    width: 100%;
-  }
-
-  .chart-buttons {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .chart-button {
-    flex: 1;
-  }
-
-  .chart-container {
-    height: 220px;
-  }
-
-  .readings-grid {
-    gap: 10px;
-    justify-content: center;
-  }
-
-  .reading-card {
-    flex: 1;
-    min-width: calc(50% - 10px);
-    max-width: calc(50% - 10px);
-    padding: 0.875rem 1rem;
-  }
-
-  .reading-time {
-    font-size: 16px !important;
+  
+  .card-container > div:last-child > div {
+    min-width: calc(50% - 12px) !important;
+    max-width: calc(50% - 12px) !important;
   }
 }
 
-/* Mobile Responsive (480px and below) */
-@media (max-width: 480px) {
-  .dashboard-wrapper {
-    padding: 0 0.5rem;
+@media (max-width: 600px) {
+  .background {
+    overflow-x: hidden;
+    padding: 0.5rem 0;
   }
-
-  .dashboard-main-card {
-    padding: 1.25rem 1rem;
-    margin: 0.75rem auto;
+  
+  .card-container {
+    padding: 1.5rem 1.2rem;
+    width: 94%;
     border-radius: 14px;
   }
-
+  
   .page-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    letter-spacing: 0.5px;
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
   }
-
-  .dashboard-grid {
-    gap: 12px;
-    margin-bottom: 20px;
+  
+  /* Dashboard wrapper */
+  div[style*="maxWidth: 1200"] {
+    padding: 0 0.5rem !important;
   }
-
-  .dashboard-card {
-    padding: 1.25rem 1rem;
-    border-radius: 14px;
+  
+  /* Main dashboard card */
+  .card-container[style*="maxWidth: 1200"] {
+    padding: 1.25rem 1rem !important;
+    margin: 0.75rem auto 1rem auto !important;
   }
-
-  .card-title {
+  
+  /* Inner cards */
+  .card-container .card-container {
+    padding: 1.25rem 1rem !important;
+    border-radius: 12px !important;
+  }
+  
+  /* Typography adjustments */
+  .card-container h6 {
     font-size: 1rem !important;
-    margin-bottom: 6px !important;
   }
-
-  .gauge-value {
+  
+  /* Gauge text */
+  .card-container h5 {
     font-size: 1.25rem !important;
-    margin-top: 6px !important;
   }
-
-  .update-time {
-    font-size: 0.75rem !important;
-  }
-
-  .status-text {
-    font-size: 0.9rem;
-  }
-
-  .knob-status {
-    font-size: 0.9rem;
-  }
-
-  .threshold-badges {
-    gap: 6px;
-    flex-direction: column;
-  }
-
-  .threshold-badge {
-    padding: 8px 12px;
-    font-size: 0.75rem;
-    width: 100%;
+  
+  /* Safety threshold badges */
+  .card-container > div:first-of-type > .card-container:last-child > div > div {
+    flex: 1 1 100% !important;
+    margin-bottom: 6px;
     text-align: center;
+    font-size: 0.85rem !important;
+    padding: 8px 12px !important;
   }
+  
+  /* Chart container */
+  .card-container > div[style*="height: 250"] {
+    height: 220px !important;
+  }
+  
+  /* Chart buttons container */
+  .card-container > div > div:first-child {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  
+  .card-container > div > div:first-child > div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  
+  .card-container > div > div:first-child > div > button {
+    flex: 1;
+    margin: 0 4px !important;
+  }
+  
+  /* Recent readings */
+  .card-container > div:last-child > div {
+    gap: 10px !important;
+  }
+}
 
-  .chart-card {
-    margin-bottom: 20px;
-    padding: 1.25rem 1rem;
+@media (max-width: 480px) {
+  .card-container {
+    padding: 1.5rem 1.2rem;
+    width: 95%;
     border-radius: 14px;
   }
-
-  .chart-title {
-    font-size: 1rem !important;
+  
+  .page-title {
+    font-size: 1.6rem;
+    margin-bottom: 1.2rem;
   }
-
-  .chart-button {
-    font-size: 0.75rem !important;
-    padding: 4px 8px !important;
-  }
-
-  .chart-container {
-    height: 200px;
-  }
-
-  .readings-grid {
-    gap: 8px;
-  }
-
-  .reading-card {
-    min-width: calc(50% - 8px);
-    max-width: calc(50% - 8px);
-    padding: 0.75rem 0.875rem;
-    border-radius: 8px;
-  }
-
-  .reading-time {
-    font-size: 14px !important;
-  }
-
-  .reading-value {
-    font-size: 1.1rem !important;
-  }
-
-  .reading-date {
-    font-size: 0.7rem !important;
-  }
-
-  .cube {
-    opacity: 0.4;
-  }
-
+  
   .styled-input {
     margin-bottom: 1rem !important;
   }
-
+  
   .styled-button {
     font-size: 0.95rem;
     padding: 0.6rem 0;
   }
+  
+  .cube {
+    opacity: 0.5;
+  }
+  
+  /* Main dashboard card */
+  .card-container[style*="maxWidth: 1200"] {
+    padding: 1rem 0.875rem !important;
+  }
+  
+  /* Inner cards */
+  .card-container .card-container {
+    padding: 1rem 0.875rem !important;
+  }
+  
+  /* Typography */
+  .card-container h6 {
+    font-size: 0.95rem !important;
+  }
+  
+  .card-container h5 {
+    font-size: 1.15rem !important;
+  }
+  
+  .card-container .MuiTypography-body2 {
+    font-size: 0.75rem !important;
+  }
+  
+  /* Gauge adjustments */
+  .card-container svg[width="120"] {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  
+  /* Safety thresholds */
+  .card-container > div:first-of-type > .card-container:last-child > div > div {
+    font-size: 0.8rem !important;
+    padding: 7px 10px !important;
+  }
+  
+  /* Chart */
+  .card-container > div[style*="height: 250"] {
+    height: 200px !important;
+  }
+  
+  /* Chart buttons */
+  .card-container button {
+    font-size: 0.8rem !important;
+    padding: 5px 10px !important;
+  }
+  
+  /* Recent readings */
+  .card-container > div:last-child > div > div {
+    padding: 0.75rem 0.875rem !important;
+    border-radius: 8px !important;
+  }
+  
+  .card-container > div:last-child > div > div .MuiTypography-subtitle2 {
+    font-size: 0.9rem !important;
+  }
+  
+  .card-container > div:last-child > div > div .MuiTypography-h6 {
+    font-size: 1.15rem !important;
+  }
 }
 
-/* Extra small devices (360px and below) */
 @media (max-width: 360px) {
   .page-title {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
-
-  .dashboard-main-card {
-    padding: 1rem 0.875rem;
+  
+  .card-container {
+    padding: 1.25rem 1rem;
   }
-
-  .dashboard-card {
-    padding: 1rem 0.875rem;
+  
+  .card-container[style*="maxWidth: 1200"] {
+    padding: 0.875rem 0.75rem !important;
   }
-
-  .reading-card {
-    min-width: 100%;
-    max-width: 100%;
+  
+  .card-container .card-container {
+    padding: 0.875rem 0.75rem !important;
   }
+  
+  /* Make recent readings single column on very small screens */
+  .card-container > div:last-child > div > div {
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Gauge smaller */
+  .card-container svg[width="120"] {
+    width: 90px !important;
+    height: 90px !important;
+  }
+  
+  /* Chart smaller */
+  .card-container > div[style*="height: 250"] {
+    height: 180px !important;
+  }
+  
+  .cube {
+    opacity: 0.4;
+  }
+}
 
-  .threshold-badge {
-    font-size: 0.7rem;
-    padding: 6px 10px;
+/* Landscape mode for mobile devices */
+@media (max-height: 600px) and (orientation: landscape) {
+  .background {
+    padding: 0.5rem 0;
+  }
+  
+  .card-container[style*="maxWidth: 1200"] {
+    margin: 0.5rem auto !important;
+  }
+  
+  .card-container > div[style*="height: 250"] {
+    height: 180px !important;
+  }
+  
+  .page-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.875rem;
   }
 }
