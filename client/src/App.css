@@ -87,7 +87,9 @@
 .background {
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #e3e6f3 0%, #f8e1f4 100%);
+  background: linear-gradient(135deg,
+  #e3e6f3 0%,
+  #f8e1f4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,7 +135,7 @@
   box-shadow: 0 4px 24px rgba(25, 118, 210, 0.10);
   padding: 2.5rem 2rem;
   max-width: 400px;
-  width: 90%;
+  width: 100%;
   margin: 2rem auto;
   display: flex;
   flex-direction: column;
@@ -169,282 +171,112 @@
   background: #125ea2 !important;
 }
 
-/* Mobile responsive styles for tablets */
+/* -------- DASHBOARD LAYOUT -------- */
+
+.dashboard-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-main-card {
+  max-width: 1200px;
+  margin: 2rem auto 1.5rem auto;
+  padding: 2rem 2.5rem;
+}
+
+.dashboard-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.dashboard-top .card-container {
+  flex: 1;
+  min-width: 280px;
+  margin: 0;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.chart-toggle-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.chart-wrapper {
+  width: 100%;
+  height: 250px;
+}
+
+.recent-readings-container {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* -------- RESPONSIVE STYLES -------- */
+
 @media (max-width: 900px) {
-  .background {
-    padding: 1rem 0;
-  }
-  
-  .page-title {
-    font-size: 1.9rem;
-  }
-  
-  /* Make dashboard cards stack */
-  .card-container > div:first-of-type {
-    flex-direction: column !important;
-  }
-  
-  .card-container > div:first-of-type > .card-container {
-    min-width: 100% !important;
-    flex: none !important;
+  .dashboard-top {
+    flex-direction: column;
   }
 }
 
 @media (max-width: 768px) {
+  .background {
+    align-items: flex-start;
+    padding: 1.5rem 1rem;
+  }
+
   .card-container {
-    padding: 2rem 1.5rem;
-    width: 92%;
+    padding: 1.5rem 1.25rem;
     margin: 1rem auto;
   }
-  
+
+  .dashboard-main-card {
+    padding: 1.5rem 1.25rem;
+    margin: 1.5rem auto 1rem auto;
+  }
+
   .page-title {
     font-size: 1.8rem;
   }
-  
-  .styled-button {
-    font-size: 1rem;
-  }
-  
-  /* Chart buttons responsiveness */
-  .card-container > div > div > button {
-    font-size: 0.875rem !important;
-    padding: 6px 12px !important;
-  }
-  
-  /* Recent readings grid */
-  .card-container > div:last-child {
-    justify-content: center !important;
-  }
-  
-  .card-container > div:last-child > div {
-    min-width: calc(50% - 12px) !important;
-    max-width: calc(50% - 12px) !important;
-  }
-}
 
-@media (max-width: 600px) {
-  .background {
-    overflow-x: hidden;
-    padding: 0.5rem 0;
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
-  
-  .card-container {
-    padding: 1.5rem 1.2rem;
-    width: 94%;
-    border-radius: 14px;
+
+  .chart-wrapper {
+    height: 220px;
   }
-  
-  .page-title {
-    font-size: 1.6rem;
-    margin-bottom: 1.2rem;
-  }
-  
-  /* Dashboard wrapper */
-  div[style*="maxWidth: 1200"] {
-    padding: 0 0.5rem !important;
-  }
-  
-  /* Main dashboard card */
-  .card-container[style*="maxWidth: 1200"] {
-    padding: 1.25rem 1rem !important;
-    margin: 0.75rem auto 1rem auto !important;
-  }
-  
-  /* Inner cards */
-  .card-container .card-container {
-    padding: 1.25rem 1rem !important;
-    border-radius: 12px !important;
-  }
-  
-  /* Typography adjustments */
-  .card-container h6 {
-    font-size: 1rem !important;
-  }
-  
-  /* Gauge text */
-  .card-container h5 {
-    font-size: 1.25rem !important;
-  }
-  
-  /* Safety threshold badges */
-  .card-container > div:first-of-type > .card-container:last-child > div > div {
-    flex: 1 1 100% !important;
-    margin-bottom: 6px;
-    text-align: center;
-    font-size: 0.85rem !important;
-    padding: 8px 12px !important;
-  }
-  
-  /* Chart container */
-  .card-container > div[style*="height: 250"] {
-    height: 220px !important;
-  }
-  
-  /* Chart buttons container */
-  .card-container > div > div:first-child {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-  }
-  
-  .card-container > div > div:first-child > div {
-    width: 100%;
-    display: flex;
+
+  .recent-readings-container {
     justify-content: center;
-    margin-top: 8px;
-  }
-  
-  .card-container > div > div:first-child > div > button {
-    flex: 1;
-    margin: 0 4px !important;
-  }
-  
-  /* Recent readings */
-  .card-container > div:last-child > div {
-    gap: 10px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .card-container {
-    padding: 1.5rem 1.2rem;
-    width: 95%;
-    border-radius: 14px;
+  .background {
+    padding: 1rem 0.75rem;
   }
-  
+
   .page-title {
     font-size: 1.6rem;
-    margin-bottom: 1.2rem;
   }
-  
-  .styled-input {
-    margin-bottom: 1rem !important;
-  }
-  
-  .styled-button {
-    font-size: 0.95rem;
-    padding: 0.6rem 0;
-  }
-  
-  .cube {
-    opacity: 0.5;
-  }
-  
-  /* Main dashboard card */
-  .card-container[style*="maxWidth: 1200"] {
-    padding: 1rem 0.875rem !important;
-  }
-  
-  /* Inner cards */
-  .card-container .card-container {
-    padding: 1rem 0.875rem !important;
-  }
-  
-  /* Typography */
-  .card-container h6 {
-    font-size: 0.95rem !important;
-  }
-  
-  .card-container h5 {
-    font-size: 1.15rem !important;
-  }
-  
-  .card-container .MuiTypography-body2 {
-    font-size: 0.75rem !important;
-  }
-  
-  /* Gauge adjustments */
-  .card-container svg[width="120"] {
-    width: 100px !important;
-    height: 100px !important;
-  }
-  
-  /* Safety thresholds */
-  .card-container > div:first-of-type > .card-container:last-child > div > div {
-    font-size: 0.8rem !important;
-    padding: 7px 10px !important;
-  }
-  
-  /* Chart */
-  .card-container > div[style*="height: 250"] {
-    height: 200px !important;
-  }
-  
-  /* Chart buttons */
-  .card-container button {
-    font-size: 0.8rem !important;
-    padding: 5px 10px !important;
-  }
-  
-  /* Recent readings */
-  .card-container > div:last-child > div > div {
-    padding: 0.75rem 0.875rem !important;
-    border-radius: 8px !important;
-  }
-  
-  .card-container > div:last-child > div > div .MuiTypography-subtitle2 {
-    font-size: 0.9rem !important;
-  }
-  
-  .card-container > div:last-child > div > div .MuiTypography-h6 {
-    font-size: 1.15rem !important;
-  }
-}
 
-@media (max-width: 360px) {
-  .page-title {
-    font-size: 1.4rem;
-  }
-  
-  .card-container {
-    padding: 1.25rem 1rem;
-  }
-  
-  .card-container[style*="maxWidth: 1200"] {
-    padding: 0.875rem 0.75rem !important;
-  }
-  
-  .card-container .card-container {
-    padding: 0.875rem 0.75rem !important;
-  }
-  
-  /* Make recent readings single column on very small screens */
-  .card-container > div:last-child > div > div {
-    min-width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  /* Gauge smaller */
-  .card-container svg[width="120"] {
-    width: 90px !important;
-    height: 90px !important;
-  }
-  
-  /* Chart smaller */
-  .card-container > div[style*="height: 250"] {
-    height: 180px !important;
-  }
-  
+  /* Optionally reduce visual noise on very small screens */
   .cube {
-    opacity: 0.4;
-  }
-}
-
-/* Landscape mode for mobile devices */
-@media (max-height: 600px) and (orientation: landscape) {
-  .background {
-    padding: 0.5rem 0;
-  }
-  
-  .card-container[style*="maxWidth: 1200"] {
-    margin: 0.5rem auto !important;
-  }
-  
-  .card-container > div[style*="height: 250"] {
-    height: 180px !important;
-  }
-  
-  .page-title {
-    font-size: 1.4rem;
-    margin-bottom: 0.875rem;
+    display: none;
   }
 }
