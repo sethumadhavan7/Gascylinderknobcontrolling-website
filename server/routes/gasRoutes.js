@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
     // 🔥 AUTO CONTROL:
     // If gasValue > THRESHOLD  → CLOSED
     // If gasValue <= THRESHOLD → OPEN
-    const THRESHOLD = 2;
+    const THRESHOLD = 200;
     let knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
 
     // ✅ SMS only when it CHANGES to CLOSED (avoid spam)
