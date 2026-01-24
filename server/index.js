@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
 app.get('/api/ipcam/stream', async (req, res) => {
   try {
     const ipCamUrl =
-      'http://192.168.155.99:6677/videofeed?username=&password=';
+      'http://null:6677/videofeed?username=&password=';
 
     const response = await axios.get(ipCamUrl, {
       responseType: 'stream',
