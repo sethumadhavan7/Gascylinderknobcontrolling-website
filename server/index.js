@@ -45,17 +45,17 @@
 
 
 require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const axios = require('axios');
 
 const app = express();
-app.set('trust proxy', 1);
+app.set('trust proxy', 1); // trust first proxy for rate limiting
 
-// Security
+// Security Middlewares
 app.use(helmet());
 app.use(
   cors({
@@ -67,49 +67,27 @@ app.use(express.json());
 
 // Rate Limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
 
-// MongoDB
+// MongoDB Connection
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.error('MongoDB error:', err));
+  .catch((err) =>
+    console.error('MongoDB connection error:', err)
+  );
 
-// Root
+// Routes
 app.get('/', (req, res) => {
   res.send('Gas Monitoring API Running');
 });
 
-// ✅ IP CAMERA STREAM PROXY (PRODUCTION SAFE)
-app.get('/api/ipcam/stream', async (req, res) => {
-  try {
-    const ipCamUrl =
-      'http://100.83.63.203:8080/videofeed?username=&password=';
-
-    const response = await axios.get(ipCamUrl, {
-      responseType: 'stream',
-      timeout: 10000,
-    });
-
-    res.setHeader(
-      'Content-Type',
-      'multipart/x-mixed-replace; boundary=frame'
-    );
-
-    response.data.pipe(res);
-  } catch (err) {
-    console.error('IP Cam stream error:', err.message);
-    res.status(500).send('IP Camera unavailable');
-  }
-});
-
-// Routes
 const authRoutes = require('./routes/authRoutes');
 const gasRoutes = require('./routes/gasRoutes');
 
