@@ -341,28 +341,24 @@ const Dashboard = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [chartType, setChartType] = useState('bar');
 
-  const backoffRef = useRef(30000);
+  const backoffRef = useRef(30000); // Start with 30 seconds
   const intervalRef = useRef();
 
-  // ✅ LIVE IP CAMERA STREAM (BACKEND PROXY)
-  const IP_CAM_STREAM_URL =
-    'https://gas-backend-0ee2.onrender.com/api/ipcam/stream';
-
   useEffect(() => {
+    let isFirstFetch = true;
     let cancelled = false;
-    let firstFetch = true;
 
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
 
-        const gasRes = await axios.get(
+        const res = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/gas`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        setGasData(gasRes.data);
+        setGasData(res.data);
 
         const knobRes = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/gas/knob`,
@@ -372,22 +368,22 @@ const Dashboard = () => {
         );
         setKnobStatus(knobRes.data.knobStatus);
 
-        backoffRef.current = 30000;
+        backoffRef.current = 30000; // Reset backoff on success
       } catch (err) {
         setGasData([]);
         setKnobStatus('UNKNOWN');
 
-        if (err.response?.status === 429) {
+        if (err.response && err.response.status === 429) {
           backoffRef.current = Math.min(
             backoffRef.current * 2,
             300000
-          );
+          ); // up to 5 min
         }
       }
 
-      if (firstFetch) {
+      if (isFirstFetch) {
         setInitialLoading(false);
-        firstFetch = false;
+        isFirstFetch = false;
       }
 
       if (!cancelled) {
@@ -427,102 +423,241 @@ const Dashboard = () => {
           <h1 className="page-title">Gas Monitoring Dashboard</h1>
 
           {initialLoading ? (
-            <CircularProgress sx={{ mx: 'auto', mt: 4 }} />
+            <CircularProgress
+              sx={{ display: 'block', mx: 'auto', mt: 4 }}
+            />
           ) : (
             <>
-              {/* TOP STATUS */}
+              {/* Top Section */}
               <div className="dashboard-top">
+                {/* Current Gas Level */}
                 <div className="card-container dashboard-card">
-                  <Typography variant="h6">
+                  <Typography variant="h6" className="card-title">
                     Current Gas Level
                   </Typography>
-                  <Gauge
-                    value={latestValue !== 'N/A' ? latestValue : 0}
-                    valueMin={0}
-                    valueMax={1023}
-                    width={120}
-                    height={120}
-                    sx={{
-                      [`& .${gaugeClasses.valueText}`]: {
-                        fontSize: 32,
-                      },
-                    }}
-                  />
-                  <Typography fontWeight={700}>
-                    {latestValue} ppm
+
+                  <div className="card-center-column">
+                    <Gauge
+                      value={latestValue !== 'N/A' ? latestValue : 0}
+                      valueMin={0}
+                      valueMax={1023}
+                      sx={{
+                        [`& .${gaugeClasses.valueText}`]: {
+                          fontSize: 32,
+                        },
+                      }}
+                      width={120}
+                      height={120}
+                      text={
+                        latestValue !== 'N/A'
+                          ? `${latestValue}`
+                          : 'N/A'
+                      }
+                    />
+
+                    <Typography
+                      variant="h5"
+                      style={{ fontWeight: 700, marginTop: 8 }}
+                    >
+                      {latestValue !== 'N/A'
+                        ? `${latestValue} ppm`
+                        : 'N/A'}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      style={{ marginTop: 4 }}
+                    >
+                      Last updated: {latestTime}
+                    </Typography>
+                  </div>
+                </div>
+
+                {/* System Status */}
+                <div className="card-container dashboard-card">
+                  <Typography variant="h6" className="card-title">
+                    System Status
                   </Typography>
-                  <Typography variant="body2">
+
+                  <div style={{ marginBottom: 8 }}>
+                    {latestValue !== 'N/A' && (
+                      <Typography
+                        style={{
+                          color:
+                            getStatus(latestValue) === 'danger'
+                              ? '#d32f2f'
+                              : getStatus(latestValue) === 'warning'
+                              ? '#f9a825'
+                              : '#388e3c',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {getStatus(latestValue) === 'danger' &&
+                          'DANGER: Critical gas levels!'}
+                        {getStatus(latestValue) === 'warning' &&
+                          'Warning: Elevated gas levels.'}
+                        {getStatus(latestValue) === 'safe' && 'Safe'}
+                      </Typography>
+                    )}
+                  </div>
+
+                  <Typography>
+                    Cylinder Knob:{' '}
+                    <span
+                      style={{
+                        color:
+                          knobStatus === 'CLOSED'
+                            ? '#d32f2f'
+                            : '#388e3c',
+                        fontWeight: 600,
+                      }}
+                    >
+                      {knobStatus}
+                    </span>
+                  </Typography>
+
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    style={{ marginTop: 4 }}
+                  >
                     Last updated: {latestTime}
                   </Typography>
                 </div>
 
+                {/* Safety Thresholds */}
                 <div className="card-container dashboard-card">
-                  <Typography variant="h6">
-                    System Status
+                  <Typography variant="h6" className="card-title">
+                    Safety Thresholds
                   </Typography>
-                  <Typography
-                    fontWeight={600}
-                    color={
-                      getStatus(latestValue) === 'danger'
-                        ? '#d32f2f'
-                        : getStatus(latestValue) === 'warning'
-                        ? '#f9a825'
-                        : '#388e3c'
-                    }
-                  >
-                    {getStatus(latestValue).toUpperCase()}
-                  </Typography>
-                  <Typography>
-                    Knob: <strong>{knobStatus}</strong>
-                  </Typography>
+
+                  <div className="thresholds-chip-row">
+                    <div className="threshold-chip safe">
+                      Safe: Below 300 ppm
+                    </div>
+                    <div className="threshold-chip warn">
+                      Warning: 300–600 ppm
+                    </div>
+                    <div className="threshold-chip danger">
+                      Danger: Above 600 ppm
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* 🔴 LIVE IP CAMERA */}
+              {/* Historical Gas Levels */}
               <div className="card-container">
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  Live IP Camera Feed
-                </Typography>
+                <div className="chart-header">
+                  <Typography variant="h6">
+                    Historical Gas Levels (Last 24 Hours)
+                  </Typography>
 
-                <img
-                  src={IP_CAM_STREAM_URL}
-                  alt="Live IP Camera"
-                  style={{
-                    width: '100%',
-                    height: 280,
-                    borderRadius: 8,
-                    border: '1px solid #ddd',
-                    background: '#000',
-                    objectFit: 'cover',
-                  }}
-                />
+                  <div className="chart-toggle-buttons">
+                    <Button
+                      variant={
+                        chartType === 'line'
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      size="small"
+                      onClick={() => setChartType('line')}
+                    >
+                      Line
+                    </Button>
+
+                    <Button
+                      variant={
+                        chartType === 'bar'
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      size="small"
+                      onClick={() => setChartType('bar')}
+                    >
+                      Bar
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="chart-wrapper">
+                  <ResponsiveContainer width="100%" height="100%">
+                    {chartType === 'line' ? (
+                      <LineChart data={gasData.slice().reverse()}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="timestamp" tick={false} />
+                        <YAxis domain={[0, 1023]} />
+                        <Tooltip />
+                        <Line
+                          type="monotone"
+                          dataKey="gasValue"
+                          stroke="#1976d2"
+                          dot={false}
+                        />
+                      </LineChart>
+                    ) : (
+                      <BarChart data={gasData.slice().reverse()}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="timestamp" tick={false} />
+                        <YAxis domain={[0, 1023]} />
+                        <Tooltip />
+                        <Bar
+                          dataKey="gasValue"
+                          fill="#1976d2"
+                        />
+                      </BarChart>
+                    )}
+                  </ResponsiveContainer>
+                </div>
               </div>
 
-              {/* GAS CHART */}
+              {/* Recent Readings */}
               <div className="card-container">
-                <ResponsiveContainer width="100%" height={300}>
-                  {chartType === 'line' ? (
-                    <LineChart data={gasData.slice().reverse()}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="timestamp" hide />
-                      <YAxis />
-                      <Tooltip />
-                      <Line
-                        dataKey="gasValue"
-                        stroke="#1976d2"
-                        dot={false}
-                      />
-                    </LineChart>
-                  ) : (
-                    <BarChart data={gasData.slice().reverse()}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="timestamp" hide />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="gasValue" fill="#1976d2" />
-                    </BarChart>
-                  )}
-                </ResponsiveContainer>
+                <Typography variant="h6" style={{ marginBottom: 16 }}>
+                  Recent Readings
+                </Typography>
+
+                <div className="recent-readings-container">
+                  {gasData.slice(0, 6).map((reading, idx) => (
+                    <div
+                      key={idx}
+                      className="recent-reading-card"
+                    >
+                      <Typography
+                        variant="subtitle2"
+                        style={{
+                          color: '#f44336',
+                          fontWeight: 700,
+                          fontSize: 18,
+                        }}
+                      >
+                        {new Date(
+                          reading.timestamp
+                        ).toLocaleTimeString()}
+                      </Typography>
+
+                      <Typography
+                        variant="h6"
+                        style={{
+                          color: '#f44336',
+                          fontWeight: 700,
+                        }}
+                      >
+                        {reading.gasValue} ppm
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        style={{ marginTop: 2 }}
+                      >
+                        {new Date(
+                          reading.timestamp
+                        ).toLocaleDateString()}
+                      </Typography>
+                    </div>
+                  ))}
+                </div>
               </div>
             </>
           )}
