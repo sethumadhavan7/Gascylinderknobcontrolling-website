@@ -428,25 +428,6 @@ const Dashboard = () => {
             />
           ) : (
             <>
-              
-              {/* 📹 IP CAMERA STREAM */}
-              <div className="card-container dashboard-card">
-                <Typography variant="h6" className="card-title">
-                  Live IP Camera
-                </Typography>
-
-                <div style={{ textAlign: 'center' }}>
-                  <iframe
-                    src="https://ipcam-2n8t.onrender.com/"
-                    width="100%"
-                    height="300"
-                    frameBorder="0"
-                    style={{ borderRadius: 8 }}
-                    title="IP Camera Stream"
-                  ></iframe>
-                </div>
-              </div>
-
               {/* Top Section */}
               <div className="dashboard-top">
                 {/* Current Gas Level */}
@@ -574,11 +555,7 @@ const Dashboard = () => {
 
                   <div className="chart-toggle-buttons">
                     <Button
-                      variant={
-                        chartType === 'line'
-                          ? 'outlined'
-                          : 'contained'
-                      }
+                      variant={chartType === 'line' ? 'outlined' : 'contained'}
                       size="small"
                       onClick={() => setChartType('line')}
                     >
@@ -586,11 +563,7 @@ const Dashboard = () => {
                     </Button>
 
                     <Button
-                      variant={
-                        chartType === 'bar'
-                          ? 'outlined'
-                          : 'contained'
-                      }
+                      variant={chartType === 'bar' ? 'outlined' : 'contained'}
                       size="small"
                       onClick={() => setChartType('bar')}
                     >
@@ -620,10 +593,7 @@ const Dashboard = () => {
                         <XAxis dataKey="timestamp" tick={false} />
                         <YAxis domain={[0, 1023]} />
                         <Tooltip />
-                        <Bar
-                          dataKey="gasValue"
-                          fill="#1976d2"
-                        />
+                        <Bar dataKey="gasValue" fill="#1976d2" />
                       </BarChart>
                     )}
                   </ResponsiveContainer>
@@ -638,10 +608,7 @@ const Dashboard = () => {
 
                 <div className="recent-readings-container">
                   {gasData.slice(0, 6).map((reading, idx) => (
-                    <div
-                      key={idx}
-                      className="recent-reading-card"
-                    >
+                    <div key={idx} className="recent-reading-card">
                       <Typography
                         variant="subtitle2"
                         style={{
@@ -650,9 +617,7 @@ const Dashboard = () => {
                           fontSize: 18,
                         }}
                       >
-                        {new Date(
-                          reading.timestamp
-                        ).toLocaleTimeString()}
+                        {new Date(reading.timestamp).toLocaleTimeString()}
                       </Typography>
 
                       <Typography
@@ -670,13 +635,25 @@ const Dashboard = () => {
                         color="textSecondary"
                         style={{ marginTop: 2 }}
                       >
-                        {new Date(
-                          reading.timestamp
-                        ).toLocaleDateString()}
+                        {new Date(reading.timestamp).toLocaleDateString()}
                       </Typography>
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* ✅ IP CAMERA BUTTON (ONLY ADDITION) */}
+              <div style={{ textAlign: 'center', marginTop: 32 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={() =>
+                    window.open('https://ipcam-2n8t.onrender.com/', '_blank')
+                  }
+                >
+                  Open IP Cam
+                </Button>
               </div>
             </>
           )}
@@ -687,3 +664,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
