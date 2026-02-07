@@ -341,7 +341,7 @@ const Dashboard = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [chartType, setChartType] = useState('bar');
 
-  const backoffRef = useRef(30000); // Start with 30 seconds
+  const backoffRef = useRef(30000);
   const intervalRef = useRef();
 
   useEffect(() => {
@@ -368,7 +368,7 @@ const Dashboard = () => {
         );
         setKnobStatus(knobRes.data.knobStatus);
 
-        backoffRef.current = 30000; // Reset backoff on success
+        backoffRef.current = 30000;
       } catch (err) {
         setGasData([]);
         setKnobStatus('UNKNOWN');
@@ -377,7 +377,7 @@ const Dashboard = () => {
           backoffRef.current = Math.min(
             backoffRef.current * 2,
             300000
-          ); // up to 5 min
+          );
         }
       }
 
@@ -428,6 +428,25 @@ const Dashboard = () => {
             />
           ) : (
             <>
+              
+              {/* 📹 IP CAMERA STREAM */}
+              <div className="card-container dashboard-card">
+                <Typography variant="h6" className="card-title">
+                  Live IP Camera
+                </Typography>
+
+                <div style={{ textAlign: 'center' }}>
+                  <iframe
+                    src="https://ipcam-2n8t.onrender.com/"
+                    width="100%"
+                    height="300"
+                    frameBorder="0"
+                    style={{ borderRadius: 8 }}
+                    title="IP Camera Stream"
+                  ></iframe>
+                </div>
+              </div>
+
               {/* Top Section */}
               <div className="dashboard-top">
                 {/* Current Gas Level */}
