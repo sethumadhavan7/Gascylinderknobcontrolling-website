@@ -145,119 +145,126 @@ const auth = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-const THRESHOLD = 1; // adjust according to MQ sensor calibration
+const THRESHOLD = 1; // Adjust based on your MQ sensor calibration
 
 // POST /api/gas  (ESP8266 sends gas value)
 router.post('/', async (req, res) => {
 try {
-const gasValue = Number(req.body.gasValue);
 
 ```
+const gasValue = Number(req.body.gasValue);
+
 if (isNaN(gasValue)) {
   return res.status(400).json({ message: 'Invalid gas value' });
 }
 
-// Get latest record
+// Get latest reading
 const latest = await Gas.findOne().sort({ timestamp: -1 });
 
 // Auto knob control
 const knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
 
-// Send SMS only when status changes to CLOSED
+// Send SMS only if status changes to CLOSED
 if (
   knobStatus === 'CLOSED' &&
   (!latest || latest.knobStatus !== 'CLOSED')
 ) {
   try {
+
     await sendSMS(
-      `🚨 ALERT: Gas leak detected! Gas value: ${gasValue}. Knob automatically CLOSED.`,
-      '+919677454080'
+      "ALERT: Gas leak detected. Gas value: " +
+        gasValue +
+        ". Knob automatically CLOSED.",
+      "+919677454080"
     );
+
   } catch (smsError) {
-    console.error('SMS sending failed:', smsError);
+    console.error("SMS sending failed:", smsError);
   }
 }
 
-// Save gas reading
+// Save gas data
 const gas = new Gas({
   gasValue,
-  knobStatus,
+  knobStatus
 });
 
 await gas.save();
 
 res.status(201).json({
-  message: 'Gas data saved',
-  knobStatus,
+  message: "Gas data saved",
+  knobStatus
 });
 ```
 
-} catch (err) {
-console.error('Error saving gas data:', err);
-res.status(500).json({ message: 'Server error' });
+} catch (error) {
+console.error("Error saving gas data:", error);
+res.status(500).json({ message: "Server error" });
 }
 });
 
-// Allow CORS preflight
+// Allow CORS preflight for ESP8266
 router.options('/', (req, res) => {
 res.sendStatus(200);
 });
 
-// GET /api/gas (Dashboard readings)
+// GET /api/gas  (Dashboard readings)
 router.get('/', auth, async (req, res) => {
 try {
-const latest = await Gas.find()
-.sort({ timestamp: -1 })
-.limit(20);
 
 ```
+const latest = await Gas.find()
+  .sort({ timestamp: -1 })
+  .limit(20);
+
 res.json(latest);
 ```
 
-} catch (err) {
-console.error('Error fetching gas data:', err);
-res.status(500).json({ message: 'Server error' });
+} catch (error) {
+console.error("Error fetching gas data:", error);
+res.status(500).json({ message: "Server error" });
 }
 });
 
-// GET /api/gas/knob (Current knob status)
+// GET /api/gas/knob  (Latest knob status)
 router.get('/knob', auth, async (req, res) => {
 try {
-const latest = await Gas.findOne().sort({ timestamp: -1 });
 
 ```
+const latest = await Gas.findOne().sort({ timestamp: -1 });
+
 res.json({
-  knobStatus: latest ? latest.knobStatus : 'UNKNOWN',
+  knobStatus: latest ? latest.knobStatus : "UNKNOWN"
 });
 ```
 
-} catch (err) {
-console.error('Error fetching knob status:', err);
-res.status(500).json({ message: 'Server error' });
+} catch (error) {
+console.error("Error fetching knob status:", error);
+res.status(500).json({ message: "Server error" });
 }
 });
 
-// POST /api/gas/reset (Manual reset)
+// POST /api/gas/reset  (Manual reset)
 router.post('/reset', auth, async (req, res) => {
 try {
-const gas = new Gas({
-gasValue: 0,
-knobStatus: 'OPEN',
-});
 
 ```
+const gas = new Gas({
+  gasValue: 0,
+  knobStatus: "OPEN"
+});
+
 await gas.save();
 
 res.json({
-  message: 'Knob manually reset to OPEN',
+  message: "Knob manually reset to OPEN"
 });
 ```
 
-} catch (err) {
-console.error('Error resetting knob:', err);
-res.status(500).json({ message: 'Server error' });
+} catch (error) {
+console.error("Error resetting knob:", error);
+res.status(500).json({ message: "Server error" });
 }
 });
 
 module.exports = router;
-
