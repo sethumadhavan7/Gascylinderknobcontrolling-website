@@ -134,18 +134,20 @@ windowMs: 15 * 60 * 1000,
 max: 100,
 });
 
-// Routes
+// Test route
 app.get('/', (req, res) => {
 res.send('Gas Monitoring API Running');
 });
 
+// Import routes
 const authRoutes = require('./routes/authRoutes');
 const gasRoutes = require('./routes/gasRoutes');
 
+// Apply routes
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/gas', gasRoutes);
 
-// MongoDB connection
+// MongoDB connection and start server
 mongoose
 .connect(process.env.MONGODB_URI)
 .then(() => {
@@ -163,3 +165,4 @@ app.listen(PORT, () => {
 .catch((err) => {
 console.error('MongoDB connection error:', err);
 });
+
