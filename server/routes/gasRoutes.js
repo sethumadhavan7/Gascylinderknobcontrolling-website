@@ -144,29 +144,25 @@ const auth = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// POST /api/gas - ESP8266 posts gas data (AUTO CONTROL ONLY)
+// POST /api/gas - ESP8266 posts gas data
 router.post('/', async (req, res) => {
 
-const { gasValue } = req.body;
+const gasValue = Number(req.body.gasValue);
 
-if (typeof gasValue !== 'number') {
+if (isNaN(gasValue)) {
 return res.status(400).json({ message: 'Invalid gas value' });
 }
 
 try {
 
 ```
-// Get last record
-const latest = await Gas.findOne().sort({ timestamp: -1 });
-
 const THRESHOLD = 2;
 
 const knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
 
-// Save gas reading
 const gas = new Gas({
-  gasValue,
-  knobStatus
+  gasValue: gasValue,
+  knobStatus: knobStatus
 });
 
 await gas.save();
@@ -221,7 +217,7 @@ res.status(500).json({ message: 'Server error' });
 
 });
 
-// GET current knob status
+// GET knob status
 router.get('/knob', auth, async (req, res) => {
 
 try {
