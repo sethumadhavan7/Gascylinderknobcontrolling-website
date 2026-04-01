@@ -138,20 +138,19 @@
 
 // module.exports = router;
 
-const express = require('express');
-const Gas = require('../models/gasModel');
-const sendSMS = require('../utils/sendSMS');
-const auth = require('../middleware/authMiddleware');
+const express = require("express");
+const Gas = require("../models/gasModel");
+const sendSMS = require("../utils/sendSMS");
+const auth = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// POST /api/gas - ESP8266 posts gas data
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
 
 const gasValue = Number(req.body.gasValue);
 
 if (isNaN(gasValue)) {
-return res.status(400).json({ message: 'Invalid gas value' });
+return res.status(400).json({ message: "Invalid gas value" });
 }
 
 try {
@@ -161,18 +160,18 @@ const latest = await Gas.findOne().sort({ timestamp: -1 });
 
 const THRESHOLD = 150;
 
-const knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
+const knobStatus = gasValue > THRESHOLD ? "CLOSED" : "OPEN";
 
-// Send SMS only when status changes to CLOSED
+// Send SMS only when status changes
 if (
-  knobStatus === 'CLOSED' &&
-  (!latest || latest.knobStatus !== 'CLOSED')
+  knobStatus === "CLOSED" &&
+  (!latest || latest.knobStatus !== "CLOSED")
 ) {
 
-  await sendSMS(
+  sendSMS(
     "ALERT: Gas value exceeded. Value: " +
     gasValue +
-    ". Knob automatically CLOSED for safety.",
+    ". Knob automatically CLOSED.",
     "+919677454080"
   );
 
@@ -194,7 +193,7 @@ res.status(201).json({
 } catch (err) {
 
 ```
-console.error("Error saving gas data:", err);
+console.error("Gas route error:", err);
 
 res.status(500).json({
   message: "Server error"
@@ -205,39 +204,26 @@ res.status(500).json({
 
 });
 
-// Allow CORS preflight for ESP8266
-router.options('/', (req, res) => {
+router.options("/", (req, res) => {
 res.sendStatus(200);
 });
 
-// Dashboard data
-router.get('/', auth, async (req, res) => {
-
+router.get("/", auth, async (req, res) => {
 try {
+const latest = await Gas.find()
+.sort({ timestamp: -1 })
+.limit(20);
 
 ```
-const latest = await Gas.find()
-  .sort({ timestamp: -1 })
-  .limit(20);
-
 res.json(latest);
 ```
 
 } catch (err) {
-
-```
-console.error("Error fetching gas data:", err);
-
 res.status(500).json({ message: "Server error" });
-```
-
 }
-
 });
 
-// Get knob status
-router.get('/knob', auth, async (req, res) => {
-
+router.get("/knob", auth, async (req, res) => {
 try {
 
 ```
@@ -249,19 +235,11 @@ res.json({
 ```
 
 } catch (err) {
-
-```
-console.error("Error fetching knob status:", err);
-
 res.status(500).json({ message: "Server error" });
-```
-
 }
-
 });
 
-// Manual reset
-router.post('/reset', auth, async (req, res) => {
+router.post("/reset", auth, async (req, res) => {
 
 try {
 
@@ -281,8 +259,6 @@ res.json({
 } catch (err) {
 
 ```
-console.error("Error resetting knob:", err);
-
 res.status(500).json({ message: "Server error" });
 ```
 
@@ -291,4 +267,3 @@ res.status(500).json({ message: "Server error" });
 });
 
 module.exports = router;
-
