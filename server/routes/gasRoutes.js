@@ -293,7 +293,7 @@ return res.status(400).json({ message: 'Invalid gas value' });
 
 try {
 
-```
+
 const latest = await Gas.findOne().sort({ timestamp: -1 });
 
 const THRESHOLD = 0;
@@ -308,8 +308,8 @@ if (
 ) {
 
   sendSMS(
-    `ALERT: Gas leak detected! Value: ${gasValue}. Check cylinder immediately.`,
-    '+918248387727'
+    "ALERT: Gas leak detected! Value: " + gasValue + ". Check cylinder immediately.",
+    "+918248387727"
   );
 
 }
@@ -325,17 +325,17 @@ res.status(201).json({
   message: 'Gas data saved',
   knobStatus
 });
-```
+
 
 } catch (err) {
 
-```
+
 console.error('Error saving gas data:', err);
 
 res.status(500).json({
   message: 'Server error'
 });
-```
+
 
 }
 
@@ -351,21 +351,21 @@ router.get('/', auth, async (req, res) => {
 
 try {
 
-```
+
 const latest = await Gas.find()
   .sort({ timestamp: -1 })
   .limit(20);
 
 res.json(latest);
-```
+
 
 } catch (err) {
 
-```
+
 console.error('Error fetching gas data:', err);
 
 res.status(500).json({ message: 'Server error' });
-```
+
 
 }
 
@@ -376,21 +376,21 @@ router.get('/knob', auth, async (req, res) => {
 
 try {
 
-```
+
 const latest = await Gas.findOne().sort({ timestamp: -1 });
 
 res.json({
   knobStatus: latest ? latest.knobStatus : 'OPEN'
 });
-```
+
 
 } catch (err) {
 
-```
+
 console.error('Error fetching knob status:', err);
 
 res.status(500).json({ message: 'Server error' });
-```
+
 
 }
 
@@ -401,7 +401,7 @@ router.post('/reset', auth, async (req, res) => {
 
 try {
 
-```
+
 const gas = new Gas({
   gasValue: 0,
   knobStatus: 'OPEN'
@@ -412,18 +412,19 @@ await gas.save();
 res.json({
   message: 'Knob manually reset to OPEN'
 });
-```
+
 
 } catch (err) {
 
-```
+
 console.error('Error resetting knob:', err);
 
 res.status(500).json({ message: 'Server error' });
-```
+
 
 }
 
 });
 
 module.exports = router;
+
