@@ -301,7 +301,7 @@ const THRESHOLD = 0;
 // Only for monitoring
 const knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
 
-// Send SMS only when gas becomes dangerous
+// Send SMS only when status changes to CLOSED
 if (
   knobStatus === 'CLOSED' &&
   (!latest || latest.knobStatus !== 'CLOSED')
@@ -321,7 +321,6 @@ const gas = new Gas({
 
 await gas.save();
 
-// Response only for monitoring
 res.status(201).json({
   message: 'Gas data saved',
   knobStatus
@@ -428,4 +427,3 @@ res.status(500).json({ message: 'Server error' });
 });
 
 module.exports = router;
-
