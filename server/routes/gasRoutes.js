@@ -296,7 +296,7 @@ try {
 
 const latest = await Gas.findOne().sort({ timestamp: -1 });
 
-const THRESHOLD = 0;
+const THRESHOLD = 500;
 
 // Only for monitoring
 const knobStatus = gasValue > THRESHOLD ? 'CLOSED' : 'OPEN';
