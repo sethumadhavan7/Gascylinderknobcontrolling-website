@@ -1,4 +1,4 @@
-Arduino sketch:
+Arduino sketch (Code) :
 
 #include <Servo.h>
 #include <ESP8266WiFi.h>
